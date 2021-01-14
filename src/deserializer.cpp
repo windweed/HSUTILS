@@ -5,7 +5,8 @@
 
 using namespace std;
 
-hs_database_t* LoadDatabase(const char* dbfile, struct CzyDBInfo* header)
+hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
+    struct CzyDBInfo* header_recv)
 {
     printf("[ Info ] Loading database from file: '%s'\n", dbfile);
 
@@ -16,29 +17,35 @@ hs_database_t* LoadDatabase(const char* dbfile, struct CzyDBInfo* header)
         fprintf(stderr, "[ ERROR ] Open '%s' Failed\n", dbfile);
         return nullptr;
     }
-
+    // 首先获得文件大小
     is.seekg(0, ios::end);
     size_t total_len = is.tellg();
-
-    size_t header_size = sizeof(struct CzyDBInfo);
-    char* header_buffer = new char[header_size];
-
+    // 回到文件头准备读取
     is.seekg(0, ios::beg);
-    is.read(header_buffer, header_size);
-    if (header)
+    // 若有头部信息则跳过，可选地提取信息。
+    size_t hdr_len = 0;
+    if (has_header)
     {
-        *header = *(struct CzyDBInfo*) header_buffer;
+        printf("[ Info ] Deserialize: Extracting header...\n");
+
+        hdr_len = sizeof(struct CzyDBInfo);
+        char* hdr_buffer = new char[hdr_len];
+        is.read(hdr_buffer, hdr_len);
+        if (header_recv)
+        {
+            printf("[ Info ] Deserialize: Writing Header...\n");
+            *header_recv = *(struct CzyDBInfo*) hdr_buffer;
+        }
+        delete[] hdr_buffer;
     }
 
-    delete[] header_buffer;
-
-    size_t db_size = total_len - header_size;
+    size_t db_size = total_len - hdr_len;
     char* bytes = nullptr;
     bytes = new char[db_size];
     is.read(bytes, db_size);
     is.close();
 
-    hs_database_t* db;
+    hs_database_t* db = nullptr;
     hs_error_t err = hs_deserialize_database(bytes, db_size, &db);
 
     delete[] bytes;
@@ -56,7 +63,7 @@ hs_database_t* LoadDatabase(const char* dbfile, struct CzyDBInfo* header)
 /**
  * @param length 默认值1
 */
-void AllocHSScratch(const hs_database_t* db, hs_scratch_t** sc, int length,
+void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
     const char* info)
 {
     hs_error_t err;
@@ -71,7 +78,7 @@ void AllocHSScratch(const hs_database_t* db, hs_scratch_t** sc, int length,
     for (int i = 1; i < length; i++)
     {
         err = hs_clone_scratch(sc[0], &sc[i]);
-        if(err != HS_SUCCESS)
+        if (err != HS_SUCCESS)
         {
             fprintf(stderr, "[ ERROR ] '%s' HS-Clone Failed with: %d\n",
                 info, err);
@@ -81,7 +88,7 @@ void AllocHSScratch(const hs_database_t* db, hs_scratch_t** sc, int length,
 }
 
 // hs_scan封装
-uint32_t ScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
+uint32_t ZiScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
 {
     if (content == nullptr || *content == '\0')
     {
@@ -89,14 +96,14 @@ uint32_t ScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
     }
 
     uint32_t id = 0U;
-    hs_error_t err = hs_scan(db, content, strlen(content), 0, sc, OnMatch, &id);
+    hs_error_t err = hs_scan(db, content, strlen(content), 0, sc, ZiOnMatch, &id);
     if (err != HS_SUCCESS)
     {}
     return id;
 }
 
 // hs_scan回调函数。
-int OnMatch(unsigned int id, unsigned long long from, unsigned long long to,
+int ZiOnMatch(unsigned int id, unsigned long long from, unsigned long long to,
     unsigned int flags, void* ctx)
 {
     *(uint32_t*)ctx = id;

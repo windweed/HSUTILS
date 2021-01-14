@@ -27,10 +27,8 @@ public:
     ~Worker();
 
     void initByCfgFile(const char* file);
-    void initBySerializedDB(const char* file, struct CzyDBInfo* dinf = nullptr);
-
-    // @UNUSED 废弃 原始的序列化接口
-    bool saveDatabase(const hs_database_t* db, const char* filename);
+    void initBySerializedDB(const char* file, bool has_header,
+        struct CzyDBInfo* dinf = nullptr);
 
     hs_database_t* getDB() const { return db_; }
     size_t getDBsize() const { return dbsize_; }
@@ -38,8 +36,6 @@ public:
     unsigned int queryDB(const struct TestFlow* flow, int thread_idx = 0);
 
 private:
-    // @UNUSED 废弃 原始的反序列化接口。 使用std::ifstream
-    hs_database_t* loadDatabase(const char* filename);
     // @UNUSED 废弃 原始的反序列化接口。 使用mmap
     hs_database_t* loadDBByMmap(const char* filename);
 

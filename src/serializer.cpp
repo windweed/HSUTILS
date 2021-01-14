@@ -8,25 +8,33 @@
 using namespace std;
 
 // 带有头部信息的序列化接口
-bool SaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
+bool ZiSaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
     const char* file)
 {
     printf("[ Info ] Serializing database to file: '%s'\n", file);
 
     char* serialized_db = nullptr;
-    size_t sdb_length = 0;
-    hs_error_t err = hs_serialize_database(db, &serialized_db, &sdb_length);
+    size_t db_len = 0;
+    hs_error_t err = hs_serialize_database(db, &serialized_db, &db_len);
     if (err != HS_SUCCESS)
     {
         fprintf(stderr, "[ ERROR ] Serialize Failed with: '%d'\n", err);
         return false;
     }
-
-    printf("[ Info ] Serialized Size: '%zu'\n", sdb_length);
+    printf("[ Info ] Serialized Size: '%zu'\n", db_len);
 
     ofstream out(file, ios::binary);
-    out.write((char*) header, sizeof(*header));
-    out.write(serialized_db, sdb_length);
+    if (header)
+    {
+        printf("[ Info ] Serialize: Writing header...\n");
+        out.write((char*) header, sizeof(*header));
+    }
+    else
+    {
+        printf("[ Info ] Serialize: No Header\n");
+    }
+
+    out.write(serialized_db, db_len);
     out.close();
 
     free(serialized_db);
@@ -42,7 +50,7 @@ void FillHeader(struct CzyDBInfo* header)
     header->ver_sub = VER_SUB;
 }
 
-hs_database_t* BuildDatabase(const struct HSCollData& data, unsigned int mode,
+hs_database_t* ZiBuildDatabase(const struct HSCollData& data, unsigned int mode,
     const char* info)
 {
     if (data.patterns.empty())

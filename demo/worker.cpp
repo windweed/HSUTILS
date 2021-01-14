@@ -38,19 +38,20 @@ void Worker::initByCfgFile(const char* filename)
 
     parseCfgFile(filename, data);
 
-    db_ = BuildDatabase(data, HS_MODE_BLOCK, "master");
-    AllocHSScratch(db_, sc_, TEST_MAX_SC, "txtcfg");
+    db_ = ZiBuildDatabase(data, HS_MODE_BLOCK, "master");
+    ZiAllocScratchs(db_, sc_, TEST_MAX_SC, "txtcfg");
 }
 
-void Worker::initBySerializedDB(const char* filename, struct CzyDBInfo* header)
+void Worker::initBySerializedDB(const char* filename, bool has_header,
+    struct CzyDBInfo* header)
 {
-    db_ = LoadDatabase(filename, header);
-    AllocHSScratch(db_, sc_, TEST_MAX_SC, "SerializedDB");
+    db_ = ZiLoadDatabase(filename, has_header, header);
+    ZiAllocScratchs(db_, sc_, TEST_MAX_SC, "SerializedDB");
 }
 
 unsigned int Worker::queryDB(const struct TestFlow* flow, int thread_idx)
 {
-    return ScanDB(flow->data, db_, sc_[thread_idx]);
+    return ZiScanDB(flow->data, db_, sc_[thread_idx]);
 }
 
 
@@ -100,88 +101,6 @@ void Worker::extractPcreAndId(string line, string& pcre, int& id) {
     } else {
         fprintf(stderr, "Err Expr: '%s'\n", line.c_str());
     }
-}
-
-// @UNUSED
-bool Worker::saveDatabase(const hs_database_t* db, const char* filename)
-{
-    printf("Saving database to: '%s' ...\n", filename);
-
-    char* bytes = nullptr;
-    size_t len = 0U;
-    hs_error_t err = hs_serialize_database(db, &bytes, &len);
-    if (err != HS_SUCCESS) {
-        fprintf(stderr, "ERROR: hs_serialize_database() failed with error %d\n", err);
-        return false;
-    }
-
-    printf("serialized database's size: %zu\n", len);
-
-    ofstream out(filename, ios::binary);
-    out.write(bytes, len);
-    out.close();
-    free(bytes);
-
-    return true;
-}
-
-// @UNUSED
-hs_database_t* Worker::loadDatabase(const char* filename)
-{
-    printf("Loading database from: '%s'.\n", filename);
-
-    char* bytes = nullptr;
-
-    ifstream is;
-    is.open(filename, ios::in | ios::binary);
-    if (!is.is_open())
-    {
-        fprintf(stderr, "Open '%s' Failed\n", filename);
-        return nullptr;
-    }
-    is.seekg(0, ios::end);
-    size_t len = is.tellg();
-    printf("Reading %zu Bytes.\n", len);
-
-    bytes = new char[len];
-
-    is.seekg(0, ios::beg);
-    is.read(bytes, len);
-    is.close();
-    assert(bytes);
-
-    char* info = nullptr;
-    hs_error_t err;
-    err = hs_serialized_database_info(bytes, len, &info);
-    if (err)
-    {
-        printf("Unable to decode serialized database info: '%d'.\n", err);
-    }
-    else if (info)
-    {
-        printf("Serialized database info: '%s'.\n", info);
-        free(info);
-    }
-    else
-    {
-        printf("Unable to decode serialized database info.\n");
-    }
-
-    hs_database_t* db = nullptr;
-
-    err = hs_deserialize_database(bytes, len, &db);
-
-    delete[] bytes;
-
-    if (err != HS_SUCCESS)
-    {
-        fprintf(stderr, "ERROR: Deserialize database failed with error %d\n", err);
-        exit(-1);
-    }
-
-    printf("Deserialize Database Successfully.\n");
-
-    return db;
 }
 
 // UNUSED

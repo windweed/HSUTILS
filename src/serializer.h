@@ -20,10 +20,10 @@ struct HSCollData
 /**
  * @brief 将单个 @p db 保存成文件，文件名由 @p file 指定。
 */
-bool SaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
+bool ZiSaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
     const char* file);
 
-hs_database_t* BuildDatabase(const struct HSCollData& data,
+hs_database_t* ZiBuildDatabase(const struct HSCollData& data,
     unsigned int mode, const char* info);
 
 void FillHeader(struct CzyDBInfo* header);
