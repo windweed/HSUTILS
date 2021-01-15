@@ -1,6 +1,6 @@
 #include "build_config.h"
 #include "serializer.h"
-#include "structs.h"
+#include "zi_struct.h"
 #include <fstream>
 #include <vector>
 #include <cstring> // strlen()
@@ -8,7 +8,7 @@
 using namespace std;
 
 // 带有头部信息的序列化接口
-bool ZiSaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
+bool ZiSaveDatabase(const hs_database_t* db, struct ZiHSDBInfo* header,
     const char* file)
 {
     printf("[ Info ] Serializing database to file: '%s'\n", file);
@@ -42,7 +42,7 @@ bool ZiSaveDatabase(const hs_database_t* db, struct CzyDBInfo* header,
 }
 
 
-void FillHeader(struct CzyDBInfo* header)
+void FillHeader(struct ZiHSDBInfo* header)
 {
     header->btime = BUILD_TIME;
     header->ver_major = VER_MAJOR;
@@ -50,7 +50,7 @@ void FillHeader(struct CzyDBInfo* header)
     header->ver_sub = VER_SUB;
 }
 
-hs_database_t* ZiBuildDatabase(const struct HSCollData& data, unsigned int mode,
+hs_database_t* ZiBuildDatabase(const struct ZiHSCollData& data, unsigned int mode,
     const char* info)
 {
     if (data.patterns.empty())

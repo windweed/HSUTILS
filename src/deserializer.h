@@ -1,7 +1,7 @@
 #ifndef _DESERIALIZER_H__
 #define _DESERIALIZER_H__
 
-#include "structs.h"
+#include "zi_struct.h"
 #include "hs.h"
 
 /**
@@ -11,7 +11,7 @@
  * @return 得到的DB。返回 nullptr 表示反序列化失败。
 */
 hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header = false,
-    struct CzyDBInfo* header_recv = nullptr);
+    struct ZiHSDBInfo* header_recv = nullptr);
 
 /**
  * @param sc 单个或数组都通用。单个时记得指定 @p length 为1

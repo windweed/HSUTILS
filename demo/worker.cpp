@@ -34,7 +34,7 @@ Worker::~Worker()
 
 void Worker::initByCfgFile(const char* filename)
 {
-    struct HSCollData data;
+    struct ZiHSCollData data;
 
     parseCfgFile(filename, data);
 
@@ -43,7 +43,7 @@ void Worker::initByCfgFile(const char* filename)
 }
 
 void Worker::initBySerializedDB(const char* filename, bool has_header,
-    struct CzyDBInfo* header)
+    struct ZiHSDBInfo* header)
 {
     db_ = ZiLoadDatabase(filename, has_header, header);
     ZiAllocScratchs(db_, sc_, TEST_MAX_SC, "SerializedDB");
@@ -55,7 +55,7 @@ unsigned int Worker::queryDB(const struct TestFlow* flow, int thread_idx)
 }
 
 
-void Worker::parseCfgFile(const char* file, struct HSCollData& data)
+void Worker::parseCfgFile(const char* file, struct ZiHSCollData& data)
 {
     printf("Reading file '%s'...\n", file);
     ifstream in_file { file };

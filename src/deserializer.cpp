@@ -6,7 +6,7 @@
 using namespace std;
 
 hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
-    struct CzyDBInfo* header_recv)
+    struct ZiHSDBInfo* header_recv)
 {
     printf("[ Info ] Loading database from file: '%s'\n", dbfile);
 
@@ -28,13 +28,13 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
     {
         printf("[ Info ] Deserialize: Extracting header...\n");
 
-        hdr_len = sizeof(struct CzyDBInfo);
+        hdr_len = sizeof(struct ZiHSDBInfo);
         char* hdr_buffer = new char[hdr_len];
         is.read(hdr_buffer, hdr_len);
         if (header_recv)
         {
             printf("[ Info ] Deserialize: Writing Header...\n");
-            *header_recv = *(struct CzyDBInfo*) hdr_buffer;
+            *header_recv = *(struct ZiHSDBInfo*) hdr_buffer;
         }
         delete[] hdr_buffer;
     }

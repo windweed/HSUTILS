@@ -3,7 +3,8 @@
 
 #include <cstdint>
 
-struct CzyDBInfo {
+struct ZiHSDBInfo
+{
     uint32_t magic = 0x407A7963;
     uint32_t btime; // build time
     char ver_major, ver_minor, ver_sub;
