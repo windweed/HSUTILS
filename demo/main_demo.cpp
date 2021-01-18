@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
 static void demo_cfg_file()
 {
-    string cfg_dir(TXT_CFG_DIR), db_out_dir(DB_OUT_DIR);
+    string cfg_dir(DEMO_TXT_CFG_DIR), db_out_dir(DB_OUT_DIR);
     Worker worker;
     worker.initByCfgFile((cfg_dir + "config.cfg").c_str());
     // query
