@@ -134,5 +134,5 @@ hs_database_t* Worker::loadDBByMmap(const char* filename)
     munmap(bytes, len);
     close(fd);
 
-    // use @variable bytes...
+    // hs_deserialize_database(bytes,) ...
 }

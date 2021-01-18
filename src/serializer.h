@@ -33,8 +33,14 @@ hs_database_t* ZiBuildDatabase(const struct ZiHSCollData& data,
 void SplitString(const std::string& input, char delim,
     std::vector<std::string>& res);
 
+/**
+ * @brief 将普通字符串转为r"\x12"(无转义) * n形式，长度4
+*/
 void HsStr2Hex(const char* xstr, char* hexbuf);
 
+/**
+ * @brief 调用`std::getline`从 @p is 中读入一行到 @p s ,忽略LF或CRLF。
+*/
 void Getline_noCR(std::istream& is, std::string& s);
 
 #endif /* _SERIALIZER_H__ */
