@@ -17,7 +17,7 @@ string(REGEX REPLACE "\r?\n" "" BUILD_TIME ${BUILD_TIME_EPOCH})
 set(BUILD_TIME ${BUILD_TIME}) # 编译时间
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 2)
-set(VERSION_SUB   3)
+set(VERSION_PATCH 3)
 set(TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/demo/\")       # 配置文件位置
 set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/\")      # 输出db的位置
 set(DB_CFG_DIR \"${CMAKE_SOURCE_DIR}/db/\")

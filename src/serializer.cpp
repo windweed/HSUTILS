@@ -47,7 +47,7 @@ void FillHeader(struct ZiHSDBInfo* header)
     header->btime = BUILD_TIME;
     header->ver_major = VER_MAJOR;
     header->ver_minor = VER_MINOR;
-    header->ver_sub = VER_SUB;
+    header->ver_patch = VER_PATCH;
 }
 
 hs_database_t* ZiBuildDatabase(const struct ZiHSCollData& data, unsigned int mode,

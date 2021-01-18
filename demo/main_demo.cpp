@@ -49,7 +49,7 @@ static void demo_serialized_db()
     worker.initBySerializedDB((db_dir + "out.db").c_str(), true, &dbinfo);
 
     printf("[ Info ] Programm Version: %d.%d.%d\n",
-        dbinfo.ver_major, dbinfo.ver_minor, dbinfo.ver_sub);
+        dbinfo.ver_major, dbinfo.ver_minor, dbinfo.ver_patch);
 
     time_t time = (time_t) dbinfo.btime;
     printf("[ Info ] Build Time: %s\n", ctime(&time));

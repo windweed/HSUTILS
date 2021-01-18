@@ -1,12 +1,28 @@
 # Personal Hyperscan Utils
 
-x86_64 RHEL7 GCC4.8.5 VSCode CMake [Hyperscan5.0.0](https://github.com/intel/hyperscan)
+## Platform
 
-可调试。
+x86_64 RHEL7.3 GCC4.8.5 CMake2.8 [Hyperscan5.0.0](https://github.com/intel/hyperscan)
 
-除了对基本使用的接口进行了封装外，
+**Editor** : `VScode` - newest version,
+**Extensions** : `ms-vscode.cpptools` , `twxs.cmake`
 
-还可以实现用于分离序列化与反序列化代码的分离，实现加密DB功能。
+## Summary
 
-生成具体DB可在`app/`下进行，同时修改`CMakeLists.txt`即可。
+Personal Utils, encapsulation of hyperscan's commonly-used interfaces.
 
+Include:
+* hs_scan, OnMatch
+* hs_compile_multi
+* hs_serialize_database, hs_deserialize_database
+* User Defined:
+    + FileParse
+    + StringSplit
+    + dbFromFile
+
+## Workflow
+
+Correct workflow using this repo:
+1. `git clone ...`, checkout to branch `main`(default)
+2. create a new branch for your every individual project based on branch main
+3. Starting coding in `app/`, and, modify the `CMakeLists.txt` and `src/config.h.in` to define your MACROS
