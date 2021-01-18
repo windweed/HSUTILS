@@ -1,6 +1,7 @@
 #include "worker.h"
 #include "serializer.h"
 #include "deserializer.h"
+#include "zi_struct.h"
 // ISO
 #include <fstream>
 #include <vector>
@@ -43,7 +44,7 @@ void Worker::initByCfgFile(const char* filename)
 }
 
 void Worker::initBySerializedDB(const char* filename, bool has_header,
-    struct ZiHSDBInfo* header)
+    struct ZiEncryptHdr* header)
 {
     db_ = ZiLoadDatabase(filename, has_header, header);
     ZiAllocScratchs(db_, sc_, TEST_MAX_SC, "SerializedDB");

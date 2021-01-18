@@ -1,7 +1,6 @@
 #ifndef _DEMO_WORKER_H__
 #define _DEMO_WORKER_H__
 
-#include "zi_struct.h"
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -28,7 +27,7 @@ public:
 
     void initByCfgFile(const char* file);
     void initBySerializedDB(const char* file, bool has_header,
-        struct ZiHSDBInfo* dinf = nullptr);
+        struct ZiEncryptHdr* dinf = nullptr);
 
     hs_database_t* getDB() const { return db_; }
     size_t getDBsize() const { return dbsize_; }

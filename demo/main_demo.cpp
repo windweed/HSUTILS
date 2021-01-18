@@ -1,3 +1,4 @@
+#include "zi_struct.h"
 #include "build_config.h"
 #include "serializer.h"
 #include "worker.h"
@@ -29,7 +30,7 @@ static void demo_cfg_file()
     id != 0U ? printf("Query OK, id is '%u'\n", id) : printf("Query Failed.\n");
     // serialize
     // with header
-    struct ZiHSDBInfo dbinfo;
+    struct ZiEncryptHdr dbinfo;
     FillHeader(&dbinfo);
     bool serialize_res = ZiSaveDatabase(worker.getDB(), &dbinfo,
                                       (db_out_dir + "out.db").c_str());
@@ -45,7 +46,7 @@ static void demo_serialized_db()
     string db_dir(DB_IN_DIR);
     Worker worker;
     // with header info
-    struct ZiHSDBInfo dbinfo;
+    struct ZiEncryptHdr dbinfo;
     worker.initBySerializedDB((db_dir + "out.db").c_str(), true, &dbinfo);
 
     printf("[ Info ] Programm Version: %d.%d.%d\n",

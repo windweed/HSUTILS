@@ -1,14 +1,13 @@
 #include "build_config.h"
-#include "serializer.h"
 #include "zi_struct.h"
+#include "serializer.h"
 #include <fstream>
 #include <vector>
 #include <cstring> // strlen()
 
 using namespace std;
 
-// 带有头部信息的序列化接口
-bool ZiSaveDatabase(const hs_database_t* db, struct ZiHSDBInfo* header,
+bool ZiSaveDatabase(const hs_database_t* db, struct ZiEncryptHdr* header,
     const char* file)
 {
     printf("[ Info ] Serializing database to file: '%s'\n", file);
@@ -27,11 +26,11 @@ bool ZiSaveDatabase(const hs_database_t* db, struct ZiHSDBInfo* header,
     if (header)
     {
         printf("[ Info ] Serialize: Writing header...\n");
-        out.write((char*) header, sizeof(*header));
+        out.write((char*) header, sizeof(struct ZiEncryptHdr));
     }
     else
     {
-        printf("[ Info ] Serialize: No Header\n");
+        printf("[ Info ] Serialize: DB will not be encrypted\n");
     }
 
     out.write(serialized_db, db_len);
@@ -41,14 +40,6 @@ bool ZiSaveDatabase(const hs_database_t* db, struct ZiHSDBInfo* header,
     return true;
 }
 
-
-void FillHeader(struct ZiHSDBInfo* header)
-{
-    header->btime = BUILD_TIME;
-    header->ver_major = VER_MAJOR;
-    header->ver_minor = VER_MINOR;
-    header->ver_patch = VER_PATCH;
-}
 
 hs_database_t* ZiBuildDatabase(const struct ZiHSCollData& data, unsigned int mode,
     const char* info)
