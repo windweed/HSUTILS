@@ -14,13 +14,19 @@ execute_process(
 string(REGEX REPLACE "\r?\n" "" BUILD_TIME ${BUILD_TIME_EPOCH})
 
 set(BUILD_TIME ${BUILD_TIME}) # 编译时间
-set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/\")      # 输出db的位置
-set(DB_CFG_DIR \"${CMAKE_SOURCE_DIR}/db/\")
+#### MODIFY BELOW
+set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/output/\")      # 输出db的位置
+set(DB_INPUT_DIR \"${CMAKE_SOURCE_DIR}/db/input/\")
+set(TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/app/\")
+set(VER_MAJOR 1)
+set(VER_MINOR 1)
+set(VER_PATCH 1)
+####
 
 # DEMO
-set(DEMO_VER_MAJOR 1)
-set(DEMO_VER_MINOR 2)
-set(DEMO_VER_PATCH 3)
+set(DEMO_VER_MAJOR 6)
+set(DEMO_VER_MINOR 7)
+set(DEMO_VER_PATCH 8)
 set(DEMO_TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/demo/\")       # 配置文件位置
 
 configure_file(
