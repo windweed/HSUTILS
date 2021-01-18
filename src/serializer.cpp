@@ -22,7 +22,7 @@ bool ZiSaveDatabase(const hs_database_t* db, struct ZiEncryptHdr* header,
     }
     printf("[ Info ] Serialized Size: '%zu'\n", db_len);
 
-    ofstream out(file, ios::binary);
+    ofstream out(file, ios::binary | ios::out);
     if (header)
     {
         printf("[ Info ] Serialize: Writing header...\n");
