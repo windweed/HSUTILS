@@ -19,9 +19,9 @@ struct ZiEncryptHdr
 inline void FillHeader(struct ZiEncryptHdr* header)
 {
     header->btime = BUILD_TIME;
-    header->ver_major = DEMO_VER_MAJOR;
-    header->ver_minor = DEMO_VER_MINOR;
-    header->ver_patch = DEMO_VER_PATCH;
+    header->ver_major = VER_MAJOR;
+    header->ver_minor = VER_MINOR;
+    header->ver_patch = VER_PATCH;
 }
 
 #endif /* _ZI_STRUCT_H__ */
