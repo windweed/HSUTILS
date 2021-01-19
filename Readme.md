@@ -1,5 +1,9 @@
 # Personal Hyperscan Utils
 
+## Contribute
+
+PLEASE WORK ON YOUR OWN BRANCH AND OPEN A MERGE REQUEST TO `dev`
+
 ## Platform
 
 x86_64 RHEL7.3 GCC4.8.5 CMake2.8 [Hyperscan5.0.0](https://github.com/intel/hyperscan)

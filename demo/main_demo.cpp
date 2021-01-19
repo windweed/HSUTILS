@@ -1,3 +1,4 @@
+#include "zi_struct.h"
 #include "build_config.h"
 #include "serializer.h"
 #include "worker.h"
@@ -8,8 +9,9 @@
 using namespace std;
 
 static void demo_cfg_file();
-
 static void demo_serialized_db();
+// helper
+static void fill_demo_hdr(struct ZiEncryptHdr*);
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +22,7 @@ int main(int argc, char* argv[])
 
 static void demo_cfg_file()
 {
-    string cfg_dir(TXT_CFG_DIR), db_out_dir(DB_OUT_DIR);
+    string cfg_dir(DEMO_TXT_CFG_DIR), db_out_dir(DB_OUT_DIR);
     Worker worker;
     worker.initByCfgFile((cfg_dir + "config.cfg").c_str());
     // query
@@ -29,10 +31,10 @@ static void demo_cfg_file()
     id != 0U ? printf("Query OK, id is '%u'\n", id) : printf("Query Failed.\n");
     // serialize
     // with header
-    struct ZiHSDBInfo dbinfo;
-    FillHeader(&dbinfo);
+    struct ZiEncryptHdr dbinfo;
+    fill_demo_hdr(&dbinfo);
     bool serialize_res = ZiSaveDatabase(worker.getDB(), &dbinfo,
-                                      (db_out_dir + "out.db").c_str());
+                                      (db_out_dir + "demo.db").c_str());
     printf("[ Info ] Serialize %s\n", serialize_res ? "Successfully" : "Failed");
     // @TEST without header
     // bool pure_seria_res = ZiSaveDatabase(worker.getDB(), nullptr,
@@ -45,10 +47,10 @@ static void demo_serialized_db()
     string db_dir(DB_IN_DIR);
     Worker worker;
     // with header info
-    struct ZiHSDBInfo dbinfo;
-    worker.initBySerializedDB((db_dir + "out.db").c_str(), true, &dbinfo);
+    struct ZiEncryptHdr dbinfo;
+    worker.initBySerializedDB((db_dir + "demo_in.db").c_str(), true, &dbinfo);
 
-    printf("[ Info ] Programm Version: %d.%d.%d\n",
+    printf("[ Info ] Demo Programm Version: %d.%d.%d\n",
         dbinfo.ver_major, dbinfo.ver_minor, dbinfo.ver_patch);
 
     time_t time = (time_t) dbinfo.btime;
@@ -62,4 +64,12 @@ static void demo_serialized_db()
     struct TestFlow flow { "hell0", 5 };
     uint id = worker.queryDB(&flow);
     id != 0U ? printf("Query OK, id is '%u'\n", id) : printf("Query Failed.\n");
+}
+
+static void fill_demo_hdr(struct ZiEncryptHdr* hdr)
+{
+    hdr->btime = DEMO_BUILD_TIME;
+    hdr->ver_major = DEMO_VER_MAJOR;
+    hdr->ver_minor = DEMO_VER_MINOR;
+    hdr->ver_patch = DEMO_VER_PATCH;
 }

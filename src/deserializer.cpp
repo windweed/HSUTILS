@@ -1,4 +1,5 @@
 #include "deserializer.h"
+#include "zi_struct.h"
 #include <fstream>
 #include <cstring>
 #include <cstdio>
@@ -6,7 +7,7 @@
 using namespace std;
 
 hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
-    struct ZiHSDBInfo* header_recv)
+    struct ZiEncryptHdr* header_recv)
 {
     printf("[ Info ] Loading database from file: '%s'\n", dbfile);
 
@@ -28,13 +29,13 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
     {
         printf("[ Info ] Deserialize: Extracting header...\n");
 
-        hdr_len = sizeof(struct ZiHSDBInfo);
+        hdr_len = sizeof(struct ZiEncryptHdr); // TODO modify len to magic number
         char* hdr_buffer = new char[hdr_len];
         is.read(hdr_buffer, hdr_len);
         if (header_recv)
         {
             printf("[ Info ] Deserialize: Writing Header...\n");
-            *header_recv = *(struct ZiHSDBInfo*) hdr_buffer;
+            *header_recv = *(struct ZiEncryptHdr*) hdr_buffer;
         }
         delete[] hdr_buffer;
     }
@@ -61,7 +62,9 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
 }
 
 /**
+ * @brief 根据 @p db 为 @p sc 数组(长度由 @p length 指定)分配空间。
  * @param length 默认值1
+ * @param info 提示信息
 */
 void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
     const char* info)
@@ -87,7 +90,6 @@ void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
     }
 }
 
-// hs_scan封装
 uint32_t ZiScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
 {
     if (content == nullptr || *content == '\0')
@@ -102,7 +104,6 @@ uint32_t ZiScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc
     return id;
 }
 
-// hs_scan回调函数。
 int ZiOnMatch(unsigned int id, unsigned long long from, unsigned long long to,
     unsigned int flags, void* ctx)
 {

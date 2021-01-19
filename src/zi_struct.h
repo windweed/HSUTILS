@@ -1,13 +1,27 @@
-#ifndef _SERIALIZE_STRUCTS_H__
-#define _SERIALIZE_STRUCTS_H__
+#ifndef _ZI_STRUCT_H__
+#define _ZI_STRUCT_H__
 
+#include "build_config.h"
 #include <cstdint>
 
-struct ZiHSDBInfo
+/**
+ * @brief 加密用的结构体。当需要自定义业务时，修改此结构体。同时修改FillHeader()函数
+*/
+struct ZiEncryptHdr
 {
     uint32_t magic = 0x407A7963;
     uint32_t btime; // build time
     char ver_major, ver_minor, ver_patch;
 };
 
-#endif /* _SERIALIZE_STRUCTS_H__ */
+// 若无inline，则会出现重复定义问题:
+// multiple definition of `FillHeader(ZiEncryptHdr*)'
+inline void FillHeader(struct ZiEncryptHdr* header)
+{
+    header->btime = BUILD_TIME;
+    header->ver_major = VER_MAJOR;
+    header->ver_minor = VER_MINOR;
+    header->ver_patch = VER_PATCH;
+}
+
+#endif /* _ZI_STRUCT_H__ */
