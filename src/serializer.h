@@ -11,7 +11,7 @@
 #include "hs.h"
 
 /**
- * @brief hyperscan从文件编译database时需要的信息。
+ * @brief hyperscan file to db. Take a look at @dir demo/
 */
 struct ZiHSCollData
 {
@@ -21,8 +21,9 @@ struct ZiHSCollData
 };
 
 /**
- * @brief 序列化接口， 将单个 @p db 保存成文件，文件名由 @p file 指定。 可选择加密。
- * @param header 非空时，加密，传入nullptr时表示不加密。
+ * @brief serialize database to file named @p file .
+ *      can be encrypted selectively.
+ * @param header when not nullptr, write header's info, or, only serialize
 */
 bool ZiSaveDatabase(const hs_database_t* db, struct ZiEncryptHdr* header,
     const char* file);
@@ -34,12 +35,12 @@ void SplitString(const std::string& input, char delim,
     std::vector<std::string>& res);
 
 /**
- * @brief 将普通字符串转为r"\x12"(无转义) * n形式，长度4
+ * @brief convert normal string to four characters: "\x12"...
 */
 void HsStr2Hex(const char* xstr, char* hexbuf);
 
 /**
- * @brief 调用`std::getline`从 @p is 中读入一行到 @p s ,忽略LF或CRLF。
+ * @brief CR-safe std::getline<istream, string>()
 */
 void Getline_noCR(std::istream& is, std::string& s);
 

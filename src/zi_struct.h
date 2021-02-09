@@ -5,7 +5,9 @@
 #include <cstdint>
 
 /**
- * @brief 加密用的结构体。当需要自定义业务时，修改此结构体。同时修改FillHeader()函数
+ * @brief to encrypt.
+ *      when a self-defined struct is needed, just modify it and the function
+ *      below (FillHeader)
 */
 struct ZiEncryptHdr
 {
@@ -14,7 +16,7 @@ struct ZiEncryptHdr
     char ver_major, ver_minor, ver_patch;
 };
 
-// 若无inline，则会出现重复定义问题:
+// if there hasn't a keyword inline, the g++ will occur a error:
 // multiple definition of `FillHeader(ZiEncryptHdr*)'
 inline void FillHeader(struct ZiEncryptHdr* header)
 {

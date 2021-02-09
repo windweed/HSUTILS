@@ -3,17 +3,18 @@ cmake_minimum_required(VERSION 2.8)
 project(HyperScan_Util)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_COMPILE_FEATURES -Wall -g -ggdb)
 set(CMAKE_CXX_COMPILER g++)
+# set(CMAKE_CXX_COMPILE_FEATURES -Wall -g -ggdb)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# 获取epoch编译时间
+# get compile time (epoch)
 execute_process(
-    COMMAND date "+%s"                # "+%Y-%m-%d %H:%M:%S"
+    COMMAND date "+%s"     # "+%Y-%m-%d %H:%M:%S" to 2021-01-01 10:00:00
     OUTPUT_VARIABLE BUILD_TIME_EPOCH
 )
 string(REGEX REPLACE "\r?\n" "" BUILD_TIME ${BUILD_TIME_EPOCH})
 
-set(BUILD_TIME ${BUILD_TIME}) # 编译时间
 #### MODIFY BELOW
 set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/output/\")      # 输出db的位置
 set(DB_INPUT_DIR \"${CMAKE_SOURCE_DIR}/db/input/\")
@@ -32,6 +33,7 @@ set(DEMO_TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/demo/\")       # 配置文件位置
 configure_file(
     ${PROJECT_SOURCE_DIR}/src/config.h.in
     ${PROJECT_BINARY_DIR}/build_config.h
+    @ONLY
 )
 
 include_directories(

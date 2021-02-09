@@ -6,9 +6,9 @@
 #include <cstdint>
 #include "hs.h"
 
-#define TEST_MAX_SC 10 // 假设的线程数目
+#define TEST_MAX_SC 10 // assumed amount of threads
 
-// 用作测试的Flow字符串
+// test strings
 struct TestFlow {
     const char* data;
     int data_len;
@@ -19,7 +19,7 @@ class Worker {
 private:
     hs_database_t* db_;
     hs_scratch_t*  sc_[TEST_MAX_SC];
-    size_t dbsize_; // 规则数目
+    size_t dbsize_; // amount of the rules to be compiled.
 
 public:
     Worker();
@@ -35,7 +35,7 @@ public:
     unsigned int queryDB(const struct TestFlow* flow, int thread_idx = 0);
 
 private:
-    // @UNUSED 废弃 原始的反序列化接口。 使用mmap
+    // @UNUSED original deserialize interface。 using mmap
     hs_database_t* loadDBByMmap(const char* filename);
 
     void parseCfgFile(const char* file, struct ZiHSCollData& data);

@@ -1,45 +1,48 @@
 #include "deserializer.h"
 #include "zi_struct.h"
 #include <fstream>
+#include <iostream>
 #include <cstring>
-#include <cstdio>
 
-using namespace std;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::ios;
 
 hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
-    struct ZiEncryptHdr* header_recv)
+    struct ZiEncryptHdr* header_recver)
 {
-    printf("[ Info ] Loading database from file: '%s'\n", dbfile);
+    cout << "[ Info ] Loading database from file: " << dbfile << endl;
 
-    ifstream is;
+    std::ifstream is;
     is.open(dbfile, ios::in | ios::binary);
     if (!is.is_open())
     {
-        fprintf(stderr, "[ ERROR ] Open '%s' Failed\n", dbfile);
+        cerr << "[ ERROR ]Open " << dbfile << " Failed" << endl;
         return nullptr;
     }
-    // 首先获得文件大小
+    // Get the file's size
     is.seekg(0, ios::end);
     size_t total_len = is.tellg();
-    // 回到文件头准备读取
+    // back to beginning and ready to read.
     is.seekg(0, ios::beg);
-    // 若有头部信息则跳过，可选地提取信息。
+    // if header exists, extrace it first if @p header_recver is not nullptr
     size_t hdr_len = 0;
     if (has_header)
     {
-        printf("[ Info ] Deserialize: Extracting header...\n");
+        cout << "[ Info ] Deserialize: Extracting header..." << endl;
 
         hdr_len = sizeof(struct ZiEncryptHdr); // TODO modify len to magic number
         char* hdr_buffer = new char[hdr_len];
         is.read(hdr_buffer, hdr_len);
-        if (header_recv)
+        if (header_recver)
         {
-            printf("[ Info ] Deserialize: Writing Header...\n");
-            *header_recv = *(struct ZiEncryptHdr*) hdr_buffer;
+            cout << "[ Info ] Deserialize: Writing Header..." << endl;
+            *header_recver = *(struct ZiEncryptHdr*) hdr_buffer;
         }
         delete[] hdr_buffer;
     }
-
+    // now read the real db data.
     size_t db_size = total_len - hdr_len;
     char* bytes = nullptr;
     bytes = new char[db_size];
@@ -53,7 +56,7 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
 
     if (err != HS_SUCCESS)
     {
-        fprintf(stderr, "[ ERROR ] Deserialize Failed with: '%d'\n", err);
+        cerr << "[ ERROR ] Deserialize Failed with: " << err << endl;
         exit(-1);
     }
     printf("[ Info ] Deserialize database successfully\n");
@@ -61,11 +64,6 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
     return db;
 }
 
-/**
- * @brief 根据 @p db 为 @p sc 数组(长度由 @p length 指定)分配空间。
- * @param length 默认值1
- * @param info 提示信息
-*/
 void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
     const char* info)
 {
