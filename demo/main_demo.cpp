@@ -1,4 +1,4 @@
-#include "zi_struct.h"
+#include "encrypt_hdr.h"
 #include "build_config.h"
 #include "serializer.h"
 #include "worker.h"

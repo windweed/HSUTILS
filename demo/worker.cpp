@@ -1,7 +1,7 @@
 #include "worker.h"
 #include "serializer.h"
 #include "deserializer.h"
-#include "zi_struct.h"
+#include "encrypt_hdr.h"
 // ISO
 #include <fstream>
 #include <vector>

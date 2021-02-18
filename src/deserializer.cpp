@@ -1,5 +1,5 @@
 #include "deserializer.h"
-#include "zi_struct.h"
+#include "encrypt_hdr.h"
 #include <fstream>
 #include <iostream>
 #include <cstring>

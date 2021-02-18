@@ -7,7 +7,7 @@
 #define DB_IN_DIR @DB_INPUT_DIR@
 #define VER_MAJOR @VER_MAJOR@
 #define VER_MINOR @VER_MINOR@
-#define VER_PATCH   @VER_PATCH@
+#define VER_PATCH @VER_PATCH@
 #define TXT_CFG_DIR @TXT_CFG_DIR@
 
 #define DEMO_BUILD_TIME @BUILD_TIME@
