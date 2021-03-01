@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.8)
 
 project(HyperScan_Util)
 
@@ -59,3 +59,26 @@ target_link_libraries(Demo
     PUBLIC
         libhs.so
 )
+
+add_library(czyhsutils SHARED ${srcfiles})
+
+# package rpm
+set(CPACK_GENERATOR RPM)
+set(CPACK_RPM_PACKAGE_AUTOREQPROV no)
+set(CPACK_PACKAGING_INSTALL_PREFIX /home/czy/install) # default /usr/local
+install(PROGRAMS build/bin/Demo DESTINATION bin)
+install(FILES src/serializer.h DESTINATION include)
+install(FILES src/deserializer.h DESTINATION include)
+install(FILES ${CMAKE_BINARY_DIR}/lib/libczyhsutils.so DESTINATION lib)
+set(CPACK_RPM_PACKAGE_NAME "czy-hsutils")
+set(CPACK_RPM_PACKAGE_SUMMARY "Simple CPack HSUTILS")
+set(CPACK_RPM_PACKAGE_VENDOR "CZYWINDWEED")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "3")
+set(CPACK_RPM_PACKAGE_GROUP "windweed")
+set(CPACK_RPM_PACKAGE_URL "github.com/windweed")
+set(CPACK_RPM_PACKAGE_DESCRIPTION "windweed, hstest")
+set(CPACK_RPM_PACKAGE_RELEASE 1)
+set(CPACK_RPM_PACKAGE_LICENSE "MIT Licence")
+include(CPack)
