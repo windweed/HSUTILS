@@ -1,4 +1,4 @@
-#include "zi_struct.h"
+#include "encrypt_hdr.h"
 #include "serializer.h"
 
 int main()

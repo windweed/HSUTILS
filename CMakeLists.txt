@@ -16,7 +16,7 @@ execute_process(
 string(REGEX REPLACE "\r?\n" "" BUILD_TIME ${BUILD_TIME_EPOCH})
 
 #### MODIFY BELOW
-set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/output/\")      # 输出db的位置
+set(DB_OUTPUT_DIR \"${CMAKE_SOURCE_DIR}/db/output/\")      # path of output db
 set(DB_INPUT_DIR \"${CMAKE_SOURCE_DIR}/db/input/\")
 set(TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/app/\")
 set(VER_MAJOR 1)
@@ -28,7 +28,7 @@ set(VER_PATCH 1)
 set(DEMO_VER_MAJOR 6)
 set(DEMO_VER_MINOR 7)
 set(DEMO_VER_PATCH 8)
-set(DEMO_TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/demo/\")       # 配置文件位置
+set(DEMO_TXT_CFG_DIR \"${CMAKE_SOURCE_DIR}/demo/\")       # path of cfg file
 
 configure_file(
     ${PROJECT_SOURCE_DIR}/src/config.h.in

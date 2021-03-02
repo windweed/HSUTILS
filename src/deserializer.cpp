@@ -32,10 +32,10 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
     {
         cout << "[ Info ] Deserialize: Extracting header..." << endl;
 
-        hdr_len = sizeof(struct ZiEncryptHdr); // TODO modify len to magic number
+        hdr_len = sizeof(struct ZiEncryptHdr); // TODO assign a magic number
         char* hdr_buffer = new char[hdr_len];
         is.read(hdr_buffer, hdr_len);
-        if (header_recver)
+        if (header_recver) // maybe assert is better
         {
             cout << "[ Info ] Deserialize: Writing Header..." << endl;
             *header_recver = *(struct ZiEncryptHdr*) hdr_buffer;
@@ -59,30 +59,30 @@ hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header,
         cerr << "[ ERROR ] Deserialize Failed with: " << err << endl;
         exit(-1);
     }
-    printf("[ Info ] Deserialize database successfully\n");
+    cout << "[ Info ] Deserialize database successfully" << endl;
 
     return db;
 }
 
-void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
+void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int sc_len,
     const char* info)
 {
     hs_error_t err;
+
     sc[0] = nullptr;
     err = hs_alloc_scratch(db, &sc[0]);
     if (err != HS_SUCCESS)
     {
-        fprintf(stderr, "[ ERROR ] '%s' HS-Alloc Failed with: %d\n", info, err);
+        cerr << "[ ERROR ] " << info << " HS-Alloc Failed: " << err << endl;
         exit(-1);
     }
 
-    for (int i = 1; i < length; i++)
+    for (int i = 1; i < sc_len; i++)
     {
         err = hs_clone_scratch(sc[0], &sc[i]);
         if (err != HS_SUCCESS)
         {
-            fprintf(stderr, "[ ERROR ] '%s' HS-Clone Failed with: %d\n",
-                info, err);
+            cerr << "[ ERROR ] " << info << " HS-Clone Failed: " << err << endl;
             exit(-1);
         }
     }
@@ -90,7 +90,7 @@ void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length,
 
 uint32_t ZiScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
 {
-    if (content == nullptr || *content == '\0')
+    if (!content || *content == '\0')
     {
         return 0U;
     }

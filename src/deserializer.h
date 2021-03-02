@@ -7,21 +7,21 @@
 /**
  * @brief Get a db by deserializing a serialized file and return it.
  *      You can choose to extract the header info if the file do have a header.
- * @param encrypted whether the @p dbfile carry a header.
- * @param header_recver To save the header info. doesn't save when nullptr.
+ * @param has_header whether the @p dbfile carrys a header.
+ * @param header_recver The header info to save when it isn't nullptr.
  * @return the generated database. nullptr if failed.
 */
-hs_database_t* ZiLoadDatabase(const char* dbfile, bool encrypted = false,
+hs_database_t* ZiLoadDatabase(const char* dbfile, bool has_header = false,
     struct ZiEncryptHdr* header_recver = nullptr);
 
 /**
  * @param sc allocate @p length scratch(s) for @p db ,
- *      when you need more than one scratch, pass a array, and set the @p length
- *      to the right value.
- * @param length the number of scratch you want.
+ *      when more than one scratch is required, just pass a array, and set the
+ *      @p length to the right value.
+ * @param sc_length the number of scratch you need.
  * @param info information to print.
 */
-void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int length = 1,
+void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int sc_len = 1,
     const char* info = "");
 
 /**
