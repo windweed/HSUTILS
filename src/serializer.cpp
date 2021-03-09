@@ -91,7 +91,7 @@ void Getline_noCR(istream& is, string& s)
 void SplitString(const string& input, char delim, vector<string>& res)
 {
     res.clear();
-    string::size_type pos1, pos2;
+    size_t pos1, pos2;
     size_t input_length = input.size();
     pos2 = input.find(delim);
     pos1 = 0;

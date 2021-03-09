@@ -90,7 +90,7 @@ void ZiAllocScratchs(const hs_database_t* db, hs_scratch_t** sc, int sc_len,
 
 uint32_t ZiScanDB(const char* content, const hs_database_t* db, hs_scratch_t* sc)
 {
-    if (!content || *content == '\0')
+    if (!db || !content || *content == '\0')
     {
         return 0U;
     }
